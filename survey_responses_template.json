@@ -1,0 +1,133 @@
+{
+  "people": ["Derek", "Michael", "Raiymbek", "Aryan", "Ethan", "Bill", "Kat", "Elson", "Luke", "Victor"],
+  "responses": {
+    "Derek": {
+      "suite_preference": "prefer_6",
+      "top5_suitemates": ["Ethan", "Michael", "Luke", "Aryan", "Bill"],
+      "conflicts": [],
+      "lifestyle": {
+        "sleep": "normal",
+        "noise": "okay_some",
+        "cleanliness": "moderate",
+        "guests": "occasional",
+        "social": "balanced"
+      }
+    },
+    "Michael": {
+      "suite_preference": "prefer_4",
+      "top5_suitemates": ["Derek", "Ethan", "Victor", "Luke", "Raiymbek"],
+      "conflicts": [],
+      "lifestyle": {
+        "sleep": "night_owl",
+        "noise": "quiet",
+        "cleanliness": "tidy",
+        "guests": "minimal",
+        "social": "solo"
+      }
+    },
+    "Raiymbek": {
+      "suite_preference": "no_preference",
+      "top5_suitemates": ["Aryan", "Ethan", "Victor", "Kat", "Luke"],
+      "conflicts": [],
+      "lifestyle": {
+        "sleep": "normal",
+        "noise": "okay_some",
+        "cleanliness": "moderate",
+        "guests": "occasional",
+        "social": "balanced"
+      }
+    },
+    "Aryan": {
+      "suite_preference": "prefer_6",
+      "top5_suitemates": ["Raiymbek", "Ethan", "Derek", "Luke", "Victor"],
+      "conflicts": [],
+      "lifestyle": {
+        "sleep": "early_bird",
+        "noise": "quiet",
+        "cleanliness": "tidy",
+        "guests": "minimal",
+        "social": "solo"
+      }
+    },
+    "Ethan": {
+      "suite_preference": "prefer_6",
+      "top5_suitemates": ["Derek", "Michael", "Aryan", "Luke", "Bill"],
+      "conflicts": [],
+      "lifestyle": {
+        "sleep": "normal",
+        "noise": "okay_some",
+        "cleanliness": "moderate",
+        "guests": "occasional",
+        "social": "balanced"
+      }
+    },
+    "Bill": {
+      "suite_preference": "prefer_4",
+      "top5_suitemates": ["Kat", "Ethan", "Derek", "Luke", "Victor"],
+      "conflicts": ["Luke"],
+      "lifestyle": {
+        "sleep": "night_owl",
+        "noise": "dont_mind",
+        "cleanliness": "relaxed",
+        "guests": "frequent",
+        "social": "group"
+      }
+    },
+    "Kat": {
+      "suite_preference": "strongly_prefer_4",
+      "top5_suitemates": ["Bill", "Elson", "Luke", "Victor", "Ethan"],
+      "conflicts": [],
+      "lifestyle": {
+        "sleep": "normal",
+        "noise": "quiet",
+        "cleanliness": "tidy",
+        "guests": "occasional",
+        "social": "balanced"
+      }
+    },
+    "Elson": {
+      "suite_preference": "no_preference",
+      "top5_suitemates": ["Kat", "Victor", "Luke", "Bill", "Raiymbek"],
+      "conflicts": [],
+      "lifestyle": {
+        "sleep": "normal",
+        "noise": "okay_some",
+        "cleanliness": "moderate",
+        "guests": "occasional",
+        "social": "group"
+      }
+    },
+    "Luke": {
+      "suite_preference": "prefer_6",
+      "top5_suitemates": ["Derek", "Ethan", "Michael", "Aryan", "Bill"],
+      "conflicts": [],
+      "lifestyle": {
+        "sleep": "night_owl",
+        "noise": "dont_mind",
+        "cleanliness": "relaxed",
+        "guests": "frequent",
+        "social": "group"
+      }
+    },
+    "Victor": {
+      "suite_preference": "prefer_4",
+      "top5_suitemates": ["Michael", "Raiymbek", "Kat", "Elson", "Aryan"],
+      "conflicts": [],
+      "lifestyle": {
+        "sleep": "normal",
+        "noise": "okay_some",
+        "cleanliness": "moderate",
+        "guests": "occasional",
+        "social": "balanced"
+      }
+    }
+  },
+  "suite_preference_options": ["strongly_prefer_6", "prefer_6", "no_preference", "prefer_4", "strongly_prefer_4"],
+  "lifestyle_options": {
+    "sleep": ["early_bird", "normal", "night_owl", "irregular"],
+    "noise": ["quiet", "okay_some", "dont_mind"],
+    "cleanliness": ["tidy", "moderate", "relaxed"],
+    "guests": ["minimal", "occasional", "frequent"],
+    "social": ["group", "balanced", "solo"]
+  }
+}
