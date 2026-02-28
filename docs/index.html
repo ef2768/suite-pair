@@ -13,6 +13,8 @@
       --muted: #8b9cb3;
       --accent: #58a6ff;
       --accent-hover: #79b8ff;
+      --accent-active: #388bfd;
+      --danger: #f85149;
       --success: #3fb950;
     }
     * { box-sizing: border-box; }
@@ -25,47 +27,133 @@
       line-height: 1.5;
       min-height: 100vh;
     }
-    .container { max-width: 520px; margin: 0 auto; }
+    .container { max-width: 560px; margin: 0 auto; }
     h1 { font-size: 1.5rem; margin: 0 0 8px; }
     .subtitle { color: var(--muted); font-size: 0.9rem; margin-bottom: 24px; }
     fieldset {
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 16px;
+      padding: 18px;
       margin-bottom: 20px;
       background: var(--surface);
     }
-    legend { font-weight: 600; padding: 0 8px; }
-    label { display: block; margin: 10px 0 4px; color: var(--muted); font-size: 0.9rem; }
-    select, input[type="text"], textarea {
-      width: 100%;
-      padding: 10px 12px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
+    legend { font-weight: 600; padding: 0 8px; margin-bottom: 4px; }
+    .field-label { color: var(--muted); font-size: 0.9rem; margin-bottom: 10px; display: block; }
+    .hint { font-size: 0.85rem; color: var(--muted); margin-top: 8px; }
+
+    /* Button grid (name, suite preference) */
+    .btn-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 8px;
+    }
+    .btn-option {
+      padding: 12px;
+      border: 2px solid var(--border);
+      border-radius: 10px;
       background: var(--bg);
       color: var(--text);
-      font-size: 1rem;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
     }
-    select:focus, input:focus, textarea:focus {
-      outline: none;
+    .btn-option:hover { border-color: var(--muted); background: #252d3a; }
+    .btn-option.selected {
       border-color: var(--accent);
+      background: rgba(88, 166, 255, 0.15);
+      color: var(--accent);
     }
-    .row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
-    .row select { flex: 1; }
-    .row span { color: var(--muted); min-width: 24px; }
-    button {
+
+    /* Suite preference: 5 options in a row */
+    .suite-row { display: flex; flex-wrap: wrap; gap: 8px; }
+    .suite-row .btn-option { flex: 1; min-width: 0; }
+
+    /* Top 5: tap to add in order */
+    .top5-pool {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .top5-pool .btn-option:disabled { opacity: 0.4; cursor: not-allowed; }
+    .top5-list {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      min-height: 44px;
+      padding: 10px;
+      background: var(--bg);
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+    .top5-list .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      background: var(--accent);
+      color: #fff;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    .top5-list .chip .remove { cursor: pointer; opacity: 0.9; font-weight: bold; }
+    .top5-list .chip .remove:hover { opacity: 1; }
+    .top5-list .placeholder { color: var(--muted); font-size: 0.9rem; }
+
+    /* Conflicts: checkboxes as buttons */
+    .conflict-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+    .conflict-grid .btn-option.selected { border-color: var(--danger); background: rgba(248, 81, 73, 0.12); color: #f85149; }
+
+    /* Sliders */
+    .slider-block { margin-bottom: 20px; }
+    .slider-block:last-child { margin-bottom: 0; }
+    .slider-label { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.9rem; color: var(--muted); }
+    input[type="range"] {
       width: 100%;
-      padding: 14px;
+      height: 8px;
+      -webkit-appearance: none;
+      appearance: none;
+      background: var(--border);
+      border-radius: 4px;
+      outline: none;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+      border: none;
+    }
+    input[type="range"]::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+      border: none;
+    }
+
+    /* Submit */
+    .btn-submit {
+      width: 100%;
+      padding: 16px;
       background: var(--accent);
       color: #fff;
       border: none;
-      border-radius: 8px;
-      font-size: 1rem;
+      border-radius: 10px;
+      font-size: 1.1rem;
       font-weight: 600;
       cursor: pointer;
       margin-top: 8px;
     }
-    button:hover { background: var(--accent-hover); }
+    .btn-submit:hover { background: var(--accent-hover); }
+
+    /* Result */
     #result { display: none; margin-top: 24px; }
     #result.show { display: block; }
     #result pre {
@@ -79,111 +167,82 @@
       word-break: break-all;
     }
     .result-actions { display: flex; gap: 10px; margin-top: 12px; }
-    .result-actions button { flex: 1; margin: 0; }
-    .btn-secondary { background: var(--border); }
-    .btn-secondary:hover { background: #3d4d66; }
+    .result-actions button { flex: 1; padding: 12px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; }
     .thank-you { color: var(--success); font-weight: 600; margin-bottom: 12px; }
-    .hint { font-size: 0.85rem; color: var(--muted); margin-top: 4px; }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>Suite Mate Survey</h1>
-    <p class="subtitle">Housing group: 6-person suite + 4-person suite. Your answers help us create fair, compatible groups.</p>
+    <p class="subtitle">6-person suite + 4-person suite. Your answers help us create fair, compatible groups.</p>
 
     <form id="survey">
       <fieldset>
         <legend>1. Your name</legend>
-        <label for="name">Select your name</label>
-        <select id="name" required>
-          <option value="">— Choose —</option>
-          <option>Derek</option>
-          <option>Michael</option>
-          <option>Raiymbek</option>
-          <option>Aryan</option>
-          <option>Ethan</option>
-          <option>Bill</option>
-          <option>Kat</option>
-          <option>Elson</option>
-          <option>Luke</option>
-          <option>Victor</option>
-        </select>
+        <div class="btn-grid" id="nameGrid" role="group" aria-label="Select your name"></div>
+        <input type="hidden" id="name" required>
       </fieldset>
 
       <fieldset>
         <legend>2. Suite size preference</legend>
-        <label for="suite">Which suite size do you prefer?</label>
-        <select id="suite" required>
-          <option value="strongly_prefer_6">Strongly prefer 6-person suite</option>
-          <option value="prefer_6">Prefer 6-person suite</option>
-          <option value="no_preference">No preference</option>
-          <option value="prefer_4">Prefer 4-person suite</option>
-          <option value="strongly_prefer_4">Strongly prefer 4-person suite</option>
-        </select>
+        <span class="field-label">Which suite do you prefer?</span>
+        <div class="suite-row" id="suiteRow" role="group">
+          <button type="button" class="btn-option" data-value="strongly_prefer_6">Strongly prefer 6</button>
+          <button type="button" class="btn-option" data-value="prefer_6">Prefer 6</button>
+          <button type="button" class="btn-option" data-value="no_preference">No preference</button>
+          <button type="button" class="btn-option" data-value="prefer_4">Prefer 4</button>
+          <button type="button" class="btn-option" data-value="strongly_prefer_4">Strongly prefer 4</button>
+        </div>
+        <input type="hidden" id="suite" required>
       </fieldset>
 
       <fieldset>
-        <legend>3. Top 5 suitemate preferences</legend>
-        <p class="hint">Who would you most like to be in the same suite with? (1 = most preferred)</p>
-        <div id="top5"></div>
+        <legend>3. Top 5 suitemates</legend>
+        <span class="field-label">Tap names in order of preference (most wanted first). Use × on a chip to remove.</span>
+        <div class="top5-pool" id="top5Pool"></div>
+        <div class="top5-list" id="top5List"><span class="placeholder">Your picks will appear here…</span></div>
       </fieldset>
 
       <fieldset>
-        <legend>4. Conflict preferences</legend>
-        <label for="conflicts">People you prefer NOT to be in the same suite with (optional)</label>
-        <input type="text" id="conflicts" placeholder="e.g. Name1, Name2 or leave blank">
-        <p class="hint">Separate names with commas. Leave blank if none.</p>
+        <legend>4. Prefer NOT to be with</legend>
+        <span class="field-label">Select anyone you’d rather not be in the same suite with (optional).</span>
+        <div class="conflict-grid" id="conflictGrid"></div>
       </fieldset>
 
       <fieldset>
-        <legend>5. Lifestyle habits</legend>
-        <label for="sleep">Sleep schedule</label>
-        <select id="sleep">
-          <option value="early_bird">Early bird (asleep by 11pm, up by 7am)</option>
-          <option value="normal" selected>Normal (11pm–1am / 7–9am)</option>
-          <option value="night_owl">Night owl (asleep after 1am, up after 9am)</option>
-          <option value="irregular">Irregular / varies</option>
-        </select>
-        <label for="noise">Noise when studying/working in room</label>
-        <select id="noise">
-          <option value="quiet">Prefer quiet</option>
-          <option value="okay_some" selected>Okay with some noise</option>
-          <option value="dont_mind">Don't mind noise</option>
-        </select>
-        <label for="cleanliness">Cleanliness / shared space</label>
-        <select id="cleanliness">
-          <option value="tidy">Prefer very tidy</option>
-          <option value="moderate" selected>Moderate — clean when needed</option>
-          <option value="relaxed">Relaxed about mess</option>
-        </select>
-        <label for="guests">Guest policy</label>
-        <select id="guests">
-          <option value="minimal">Minimal overnight guests</option>
-          <option value="occasional" selected>Okay with occasional guests</option>
-          <option value="frequent">Fine with frequent guests</option>
-        </select>
-        <label for="social">Social vs solo time</label>
-        <select id="social">
-          <option value="group">Prefer more group hangouts</option>
-          <option value="balanced" selected>Balanced</option>
-          <option value="solo">Prefer more solo/quiet time</option>
-        </select>
+        <legend>5. Lifestyle</legend>
+        <span class="field-label">Slide to match your habits.</span>
+        <div class="slider-block">
+          <div class="slider-label"><span>Early bird</span><span id="sleepVal">Normal</span></div>
+          <input type="range" id="sleep" min="0" max="3" value="1" step="1">
+        </div>
+        <div class="slider-block">
+          <div class="slider-label"><span>Quiet</span><span id="noiseVal">Okay with some noise</span></div>
+          <input type="range" id="noise" min="0" max="2" value="1" step="1">
+        </div>
+        <div class="slider-block">
+          <div class="slider-label"><span>Tidy</span><span id="cleanVal">Moderate</span></div>
+          <input type="range" id="cleanliness" min="0" max="2" value="1" step="1">
+        </div>
+        <div class="slider-block">
+          <div class="slider-label"><span>Few guests</span><span id="guestsVal">Occasional</span></div>
+          <input type="range" id="guests" min="0" max="2" value="1" step="1">
+        </div>
+        <div class="slider-block">
+          <div class="slider-label"><span>Group hangouts</span><span id="socialVal">Balanced</span></div>
+          <input type="range" id="social" min="0" max="2" value="1" step="1">
+        </div>
       </fieldset>
 
-      <fieldset>
-        <legend>6. Anything else? (optional)</legend>
-        <textarea id="notes" rows="3" placeholder="Other preferences, accommodations, or comments…"></textarea>
-      </fieldset>
-
-      <button type="submit">Submit survey</button>
+      <button type="submit" class="btn-submit">Submit survey</button>
     </form>
 
     <div id="result">
       <p class="thank-you">Thanks! Send your response to the group organizer.</p>
       <pre id="jsonOut"></pre>
       <div class="result-actions">
-        <button type="button" class="btn-secondary" id="copyBtn">Copy to clipboard</button>
-        <button type="button" class="btn-secondary" id="downloadBtn">Download .json</button>
+        <button type="button" id="copyBtn">Copy to clipboard</button>
+        <button type="button" id="downloadBtn">Download .json</button>
       </div>
     </div>
   </div>
@@ -191,59 +250,157 @@
   <script>
     const PEOPLE = ['Derek', 'Michael', 'Raiymbek', 'Aryan', 'Ethan', 'Bill', 'Kat', 'Elson', 'Luke', 'Victor'];
 
-    function buildTop5Dropdowns() {
-      const nameEl = document.getElementById('name');
-      const container = document.getElementById('top5');
-      container.innerHTML = '';
-      for (let r = 1; r <= 5; r++) {
-        const div = document.createElement('div');
-        div.className = 'row';
-        const sel = document.createElement('select');
-        sel.name = 'top5_' + r;
-        sel.id = 'top5_' + r;
-        sel.innerHTML = '<option value="">— Optional —</option>';
-        PEOPLE.forEach(p => sel.appendChild(new Option(p, p)));
-        div.innerHTML = '<span>' + r + '.</span>';
-        div.appendChild(sel);
-        container.appendChild(div);
-      }
-      nameEl.addEventListener('change', excludeSelfFromTop5);
-    }
+    const SUITE_LABELS = { strongly_prefer_6: 'Strongly 6', prefer_6: 'Prefer 6', no_preference: 'No pref', prefer_4: 'Prefer 4', strongly_prefer_4: 'Strongly 4' };
+    const SLEEP = ['early_bird', 'normal', 'night_owl', 'irregular'];
+    const SLEEP_LABELS = ['Early bird', 'Normal', 'Night owl', 'Irregular'];
+    const NOISE = ['quiet', 'okay_some', 'dont_mind'];
+    const NOISE_LABELS = ['Quiet', 'Okay with some noise', "Don't mind"];
+    const CLEAN = ['tidy', 'moderate', 'relaxed'];
+    const CLEAN_LABELS = ['Tidy', 'Moderate', 'Relaxed'];
+    const GUESTS = ['minimal', 'occasional', 'frequent'];
+    const GUESTS_LABELS = ['Minimal', 'Occasional', 'Frequent'];
+    const SOCIAL = ['group', 'balanced', 'solo'];
+    const SOCIAL_LABELS = ['Group', 'Balanced', 'Solo'];
 
-    function excludeSelfFromTop5() {
-      const self = document.getElementById('name').value;
-      document.querySelectorAll('#top5 select').forEach(sel => {
-        const current = sel.value;
-        sel.innerHTML = '<option value="">— Optional —</option>';
-        PEOPLE.filter(p => p !== self).forEach(p => sel.appendChild(new Option(p, p)));
-        if (current && current !== self) sel.value = current;
+    // 1. Name buttons
+    const nameGrid = document.getElementById('nameGrid');
+    const nameInput = document.getElementById('name');
+    PEOPLE.forEach(name => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'btn-option';
+      btn.textContent = name;
+      btn.dataset.value = name;
+      btn.addEventListener('click', () => {
+        nameGrid.querySelectorAll('.btn-option').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        nameInput.value = name;
+        updateTop5Pool();
+        updateConflictGrid();
+      });
+      nameGrid.appendChild(btn);
+    });
+
+    // 2. Suite buttons
+    const suiteInput = document.getElementById('suite');
+    document.getElementById('suiteRow').querySelectorAll('.btn-option').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.getElementById('suiteRow').querySelectorAll('.btn-option').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        suiteInput.value = btn.dataset.value;
+      });
+    });
+
+    // 3. Top 5 (tap to add in order)
+    let top5Order = [];
+    const top5Pool = document.getElementById('top5Pool');
+    const top5List = document.getElementById('top5List');
+
+    function renderTop5List() {
+      top5List.innerHTML = '';
+      if (top5Order.length === 0) {
+        const ph = document.createElement('span');
+        ph.className = 'placeholder';
+        ph.textContent = 'Your picks will appear here…';
+        top5List.appendChild(ph);
+        return;
+      }
+      top5Order.forEach((name, i) => {
+        const chip = document.createElement('span');
+        chip.className = 'chip';
+        chip.innerHTML = `<span>${i + 1}. ${name}</span> <span class="remove" data-name="${name}" aria-label="Remove">×</span>`;
+        chip.querySelector('.remove').addEventListener('click', () => {
+          top5Order = top5Order.filter(n => n !== name);
+          renderTop5List();
+          updateTop5Pool();
+        });
+        top5List.appendChild(chip);
       });
     }
 
-    buildTop5Dropdowns();
+    function updateTop5Pool() {
+      const self = nameInput.value;
+      if (!self) return;
+      top5Pool.innerHTML = '';
+      const available = PEOPLE.filter(p => p !== self && !top5Order.includes(p));
+      available.forEach(name => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'btn-option';
+        btn.textContent = name;
+        btn.disabled = top5Order.length >= 5;
+        btn.addEventListener('click', () => {
+          if (top5Order.length < 5) {
+            top5Order.push(name);
+            renderTop5List();
+            updateTop5Pool();
+          }
+        });
+        top5Pool.appendChild(btn);
+      });
+    }
 
+    nameInput.addEventListener('input', () => { top5Order = []; renderTop5List(); updateTop5Pool(); });
+
+    // 4. Conflicts (checkboxes as toggle buttons)
+    const conflictGrid = document.getElementById('conflictGrid');
+    const conflictSelected = new Set();
+
+    function updateConflictGrid() {
+      const self = nameInput.value;
+      if (!self) return;
+      conflictGrid.innerHTML = '';
+      PEOPLE.filter(p => p !== self).forEach(name => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'btn-option' + (conflictSelected.has(name) ? ' selected' : '');
+        btn.textContent = name;
+        btn.addEventListener('click', () => {
+          if (conflictSelected.has(name)) conflictSelected.delete(name);
+          else conflictSelected.add(name);
+          btn.classList.toggle('selected', conflictSelected.has(name));
+        });
+        conflictGrid.appendChild(btn);
+      });
+    }
+
+    nameInput.addEventListener('input', () => { conflictSelected.clear(); updateConflictGrid(); });
+
+    // 5. Slider labels
+    document.getElementById('sleep').addEventListener('input', e => {
+      document.getElementById('sleepVal').textContent = SLEEP_LABELS[+e.target.value];
+    });
+    document.getElementById('noise').addEventListener('input', e => {
+      document.getElementById('noiseVal').textContent = NOISE_LABELS[+e.target.value];
+    });
+    document.getElementById('cleanliness').addEventListener('input', e => {
+      document.getElementById('cleanVal').textContent = CLEAN_LABELS[+e.target.value];
+    });
+    document.getElementById('guests').addEventListener('input', e => {
+      document.getElementById('guestsVal').textContent = GUESTS_LABELS[+e.target.value];
+    });
+    document.getElementById('social').addEventListener('input', e => {
+      document.getElementById('socialVal').textContent = SOCIAL_LABELS[+e.target.value];
+    });
+
+    // Submit
     document.getElementById('survey').addEventListener('submit', function(e) {
       e.preventDefault();
-      const name = document.getElementById('name').value;
-      const top5 = [];
-      for (let i = 1; i <= 5; i++) {
-        const v = document.getElementById('top5_' + i).value;
-        if (v && !top5.includes(v)) top5.push(v);
-      }
-      const conflictStr = (document.getElementById('conflicts').value || '').trim();
-      const conflicts = conflictStr ? conflictStr.split(/[,;]+/).map(s => s.trim()).filter(Boolean);
+      const name = nameInput.value;
+      if (!name) { alert('Please select your name.'); return; }
+      if (!suiteInput.value) { alert('Please select a suite preference.'); return; }
 
       const response = {
         [name]: {
-          suite_preference: document.getElementById('suite').value,
-          top5_suitemates: top5,
-          conflicts: conflicts,
+          suite_preference: suiteInput.value,
+          top5_suitemates: top5Order.slice(0, 5),
+          conflicts: Array.from(conflictSelected),
           lifestyle: {
-            sleep: document.getElementById('sleep').value,
-            noise: document.getElementById('noise').value,
-            cleanliness: document.getElementById('cleanliness').value,
-            guests: document.getElementById('guests').value,
-            social: document.getElementById('social').value
+            sleep: SLEEP[+document.getElementById('sleep').value],
+            noise: NOISE[+document.getElementById('noise').value],
+            cleanliness: CLEAN[+document.getElementById('cleanliness').value],
+            guests: GUESTS[+document.getElementById('guests').value],
+            social: SOCIAL[+document.getElementById('social').value]
           }
         }
       };
@@ -252,7 +409,6 @@
       document.getElementById('jsonOut').textContent = jsonStr;
       document.getElementById('result').classList.add('show');
       document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
-
       window._lastJson = jsonStr;
       window._lastName = name;
     });
