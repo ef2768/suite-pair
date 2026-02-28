@@ -1,15 +1,17 @@
 # You've pushed to GitHub — what to do next
 
+**If the site wasn’t showing the survey:** The survey is now in the **docs** folder. Push the new `docs` folder to GitHub, then set Pages to use **/docs** (see below). After that, the live site will be the survey form.
+
 ## 1. Turn on GitHub Pages (get your survey link)
 
 1. Open your repo: **https://github.com/ef2768/suite-pair**
 2. Click **Settings** (top menu of the repo).
 3. In the left sidebar, click **Pages**.
 4. Under **Build and deployment** → **Source**, choose **Deploy from a branch**.
-5. Under **Branch**, pick **main**, folder **/ (root)**.
+5. Under **Branch**, pick **main**, and set the folder to **/docs** (not "root").
 6. Click **Save**.
 
-After a minute or two, your survey will be live at:
+The survey lives in the **docs** folder, so the site will show the form. After a minute or two, your survey will be live at:
 
 **https://ef2768.github.io/suite-pair/**
 

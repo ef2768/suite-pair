@@ -52,8 +52,8 @@ After the repo is on GitHub:
 
 1. In the repo, go to **Settings → Pages**
 2. Under **Source**, choose **Deploy from a branch**
-3. Branch: **main**, folder: **/ (root)** → Save
-4. Your survey will be at: **`https://YOUR_USERNAME.github.io/YOUR_REPO_NAME/`**  
+3. Branch: **main**, folder: **/docs** (not root) → Save
+4. Your survey will be at: **`https://ef2768.github.io/suite-pair/`**  
    (It may take a few minutes the first time.)
 
-Then you can send that link for the survey. Make sure **index.html** is in the root of the repo (it is in this project).
+The survey form is in the **docs** folder (**docs/index.html**). Using **/docs** as the Pages source makes the site show the survey.
