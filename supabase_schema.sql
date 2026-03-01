@@ -11,10 +11,11 @@ create table if not exists public.survey_responses (
 );
 
 -- One response per person (latest wins if they submit again)
-create unique index if not exists survey_responses_respondent_name_key
-  on public.survey_responses (respondent_name);
+-- PostgREST upsert requires a UNIQUE constraint (not just index) for on_conflict
+alter table public.survey_responses
+  add constraint survey_responses_respondent_name_key unique (respondent_name);
 
--- Allow anonymous insert (for the form) and read (for fetch script / dashboard)
+-- Allow anonymous insert/update (for form + upsert) and read (for fetch script / dashboard)
 alter table public.survey_responses enable row level security;
 
 create policy "Allow anonymous insert"
@@ -24,6 +25,11 @@ create policy "Allow anonymous insert"
 create policy "Allow anonymous select"
   on public.survey_responses for select
   to anon using (true);
+
+-- Required for upsert: merge-duplicates does ON CONFLICT DO UPDATE
+create policy "Allow anonymous update"
+  on public.survey_responses for update
+  to anon using (true) with check (true);
 
 -- Optional: allow update so resubmitting overwrites (handled in app by delete + insert or upsert)
 -- Here we use unique index so duplicate names get a conflict; the form can send a single response per person.

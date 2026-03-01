@@ -198,7 +198,7 @@
     const PEOPLE = ['Derek', 'Michael', 'Raiymbek', 'Aryan', 'Ethan', 'Bill', 'Kat', 'Elson', 'Luke', 'Victor'];
 
     // Supabase: set these to save responses to your database (see SUPABASE_SETUP.md)
-    const SUPABASE_URL = 'https://zphepmydpdpwjkrekga.supabase.co';
+    const SUPABASE_URL = 'https://zphepmydpdqwzkrekgas.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpwaGVwbXlkcGRxd3prcmVrZ2FzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIzMjg4NDMsImV4cCI6MjA4NzkwNDg0M30.r523_F9uJldlM_1XQPdKiO42dLGINiBM5ACBhE5e6Cc';
 
     // 1. Name buttons
@@ -314,8 +314,9 @@
       const top5 = top5Order.slice(0, 5);
       const conflicts = Array.from(conflictSelected);
 
-      document.getElementById('result').classList.add('show');
-      document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+      const resultEl = document.getElementById('result');
+      resultEl.classList.add('show');
+      resultEl.scrollIntoView({ behavior: 'smooth' });
 
       if (SUPABASE_URL && SUPABASE_ANON_KEY) {
         const row = {
@@ -338,11 +339,17 @@
           });
           if (!res.ok) {
             const err = await res.text();
-            console.warn('Supabase save failed:', err);
+            console.warn('Supabase save failed:', res.status, err);
+            resultEl.innerHTML = '<p class="thank-you" style="color:var(--danger)">Save failed. Check console (F12) or try again.</p><p class="hint">' + (err || res.status) + '</p>';
+            return;
           }
+          resultEl.innerHTML = '<p class="thank-you">Your response is recorded.</p>';
         } catch (err) {
           console.warn('Supabase save failed:', err);
+          resultEl.innerHTML = '<p class="thank-you" style="color:var(--danger)">Network error. Check connection and try again.</p>';
         }
+      } else {
+        resultEl.innerHTML = '<p class="thank-you">Your response is recorded.</p>';
       }
     });
   </script>
