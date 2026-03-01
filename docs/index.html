@@ -145,18 +145,6 @@
     /* Result */
     #result { display: none; margin-top: 24px; }
     #result.show { display: block; }
-    #result pre {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 16px;
-      overflow-x: auto;
-      font-size: 0.8rem;
-      white-space: pre-wrap;
-      word-break: break-all;
-    }
-    .result-actions { display: flex; gap: 10px; margin-top: 12px; }
-    .result-actions button { flex: 1; padding: 12px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; }
     .thank-you { color: var(--success); font-weight: 600; margin-bottom: 12px; }
   </style>
 </head>
@@ -203,11 +191,6 @@
 
     <div id="result">
       <p class="thank-you">Your response is recorded.</p>
-      <pre id="jsonOut"></pre>
-      <div class="result-actions">
-        <button type="button" id="copyBtn">Copy to clipboard</button>
-        <button type="button" id="downloadBtn">Download .json</button>
-      </div>
     </div>
   </div>
 
@@ -331,21 +314,8 @@
       const top5 = top5Order.slice(0, 5);
       const conflicts = Array.from(conflictSelected);
 
-      const response = {
-        [name]: {
-          prefer_6_strength: prefer6,
-          prefer_4_strength: prefer4,
-          top5_suitemates: top5,
-          conflicts: conflicts
-        }
-      };
-
-      const jsonStr = JSON.stringify(response, null, 2);
-      document.getElementById('jsonOut').textContent = jsonStr;
       document.getElementById('result').classList.add('show');
       document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
-      window._lastJson = jsonStr;
-      window._lastName = name;
 
       if (SUPABASE_URL && SUPABASE_ANON_KEY) {
         const row = {
@@ -374,23 +344,6 @@
           console.warn('Supabase save failed:', err);
         }
       }
-    });
-
-    document.getElementById('copyBtn').addEventListener('click', function() {
-      navigator.clipboard.writeText(window._lastJson || '').then(() => {
-        this.textContent = 'Copied!';
-        setTimeout(() => { this.textContent = 'Copy to clipboard'; }, 2000);
-      });
-    });
-
-    document.getElementById('downloadBtn').addEventListener('click', function() {
-      const name = (window._lastName || 'response').replace(/\s+/g, '_');
-      const blob = new Blob([window._lastJson || '{}'], { type: 'application/json' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = name + '_survey_response.json';
-      a.click();
-      URL.revokeObjectURL(a.href);
     });
   </script>
 </body>
