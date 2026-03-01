@@ -210,6 +210,28 @@ def run(survey_path: str, output_path: Optional[str] = None) -> list[tuple[set[s
 
 
 if __name__ == "__main__":
-    survey_file = Path(__file__).parent / "survey_responses_template.json"
-    report_file = Path(__file__).parent / "pairing_report.md"
+    import os
+    try:
+        from dotenv import load_dotenv
+        load_dotenv()
+    except ImportError:
+        pass
+
+    base = Path(__file__).parent
+    report_file = base / "pairing_report.md"
+
+    # If Supabase is configured, fetch latest responses first (automates Step 4)
+    if os.environ.get("SUPABASE_URL") and os.environ.get("SUPABASE_ANON_KEY"):
+        try:
+            import fetch_responses
+            fetch_responses.main()
+        except Exception as e:
+            print("Supabase fetch failed:", e)
+            print("Falling back to existing survey_responses.json or template.\n")
+
+    # Use survey_responses.json if it exists, else template
+    survey_file = base / "survey_responses.json"
+    if not survey_file.exists():
+        survey_file = base / "survey_responses_template.json"
+
     run(str(survey_file), str(report_file))

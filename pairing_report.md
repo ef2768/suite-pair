@@ -18,8 +18,8 @@
   - Victor is with preferred suitemates: Kat, Elson
 
 **Suite size preference:**
-  - In 6-person (prefer 6): Raiymbek, Aryan, Derek, Ethan, Luke
-  - In 4-person (prefer 4): Victor, Kat, Elson, Bill
+  - In 6-person (prefer 6): Ethan, Derek, Aryan, Luke, Raiymbek
+  - In 4-person (prefer 4): Victor, Bill, Elson, Kat
 
 **Scores:**
   - Top-5 preference score: 111.0
@@ -46,8 +46,8 @@
   - Victor is with preferred suitemates: Michael, Aryan
 
 **Suite size preference:**
-  - In 6-person (prefer 6): Aryan, Derek, Ethan, Luke
-  - In 4-person (prefer 4): Raiymbek, Kat, Elson, Bill
+  - In 6-person (prefer 6): Ethan, Derek, Aryan, Luke
+  - In 4-person (prefer 4): Raiymbek, Elson, Bill, Kat
 
 **Scores:**
   - Top-5 preference score: 96.0
@@ -74,7 +74,7 @@
   - Victor is with preferred suitemates: Raiymbek, Kat, Elson, Aryan
 
 **Suite size preference:**
-  - In 6-person (prefer 6): Elson, Raiymbek, Aryan
+  - In 6-person (prefer 6): Aryan, Elson, Raiymbek
   - In 4-person (prefer 4): Michael
 
 **Scores:**
