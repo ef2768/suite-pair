@@ -167,6 +167,7 @@ def run(survey_path: str, output_path: Optional[str] = None) -> list[tuple[set[s
     If output_path is set, also write a markdown report there.
     """
     people, persons = load_survey_data(survey_path)
+    num_responses = len(persons)
     if set(people) != set(persons.keys()):
         raise ValueError("Survey people list and responses keys must match.")
 
@@ -188,6 +189,7 @@ def run(survey_path: str, output_path: Optional[str] = None) -> list[tuple[set[s
 
     # Console output
     print("=" * 60)
+    print(f"Survey responses recorded: {num_responses}")
     print("TOP 3 SUITE PAIRINGS")
     print("=" * 60)
     for i, (s6, s4, total, breakdown) in enumerate(top3, 1):
@@ -198,7 +200,10 @@ def run(survey_path: str, output_path: Optional[str] = None) -> list[tuple[set[s
 
     # Markdown report
     if output_path:
-        report = ["# Suite Pairing Results: Top 3 Options\n"]
+        report = [
+            "# Suite Pairing Results: Top 3 Options\n",
+            f"**Survey responses recorded:** {num_responses}\n",
+        ]
         for i, (s6, s4, total, breakdown) in enumerate(top3, 1):
             report.append(f"## Option {i} — Score: {breakdown['total']}\n")
             report.append(generate_justification(s6, s4, persons, breakdown))
@@ -221,17 +226,19 @@ if __name__ == "__main__":
     report_file = base / "pairing_report.md"
 
     # If Supabase is configured, fetch latest responses first (automates Step 4)
+    fetched = False
     if os.environ.get("SUPABASE_URL") and os.environ.get("SUPABASE_ANON_KEY"):
         try:
             import fetch_responses
-            fetch_responses.main()
+            fetched = fetch_responses.main()
         except Exception as e:
             print("Supabase fetch failed:", e)
-            print("Falling back to existing survey_responses.json or template.\n")
 
     # Use survey_responses.json if it exists, else template
     survey_file = base / "survey_responses.json"
     if not survey_file.exists():
         survey_file = base / "survey_responses_template.json"
+    if not fetched and survey_file.exists():
+        print(f"Using local data: {survey_file.name}\n")
 
     run(str(survey_file), str(report_file))

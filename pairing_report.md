@@ -1,5 +1,7 @@
 # Suite Pairing Results: Top 3 Options
 
+**Survey responses recorded:** 10
+
 ## Option 1 — Score: 407.0
 
 **6-person suite:** Aryan, Derek, Ethan, Luke, Michael, Raiymbek
@@ -18,8 +20,8 @@
   - Victor is with preferred suitemates: Kat, Elson
 
 **Suite size preference:**
-  - In 6-person (prefer 6): Ethan, Derek, Aryan, Luke, Raiymbek
-  - In 4-person (prefer 4): Victor, Bill, Elson, Kat
+  - In 6-person (prefer 6): Derek, Luke, Raiymbek, Ethan, Aryan
+  - In 4-person (prefer 4): Kat, Elson, Victor, Bill
 
 **Scores:**
   - Top-5 preference score: 111.0
@@ -46,8 +48,8 @@
   - Victor is with preferred suitemates: Michael, Aryan
 
 **Suite size preference:**
-  - In 6-person (prefer 6): Ethan, Derek, Aryan, Luke
-  - In 4-person (prefer 4): Raiymbek, Elson, Bill, Kat
+  - In 6-person (prefer 6): Derek, Luke, Ethan, Aryan
+  - In 4-person (prefer 4): Kat, Raiymbek, Elson, Bill
 
 **Scores:**
   - Top-5 preference score: 96.0
@@ -74,7 +76,7 @@
   - Victor is with preferred suitemates: Raiymbek, Kat, Elson, Aryan
 
 **Suite size preference:**
-  - In 6-person (prefer 6): Aryan, Elson, Raiymbek
+  - In 6-person (prefer 6): Elson, Raiymbek, Aryan
   - In 4-person (prefer 4): Michael
 
 **Scores:**

@@ -17,8 +17,8 @@ try:
 except ImportError:
     pass
 
-SUPABASE_URL = os.environ.get("SUPABASE_URL", "").rstrip("/")
-SUPABASE_ANON_KEY = os.environ.get("SUPABASE_ANON_KEY", "")
+SUPABASE_URL = os.environ.get("SUPABASE_URL", "https://zphepmydpdpwjkrekga.supabase.co").rstrip("/")
+SUPABASE_ANON_KEY = os.environ.get("SUPABASE_ANON_KEY", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpwaGVwbXlkcGRxd3prcmVrZ2FzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIzMjg4NDMsImV4cCI6MjA4NzkwNDg0M30.r523_F9uJldlM_1XQPdKiO42dLGINiBM5ACBhE5e6Cc")
 
 PEOPLE = [
     "Derek", "Michael", "Raiymbek", "Aryan", "Ethan",
@@ -29,9 +29,11 @@ PEOPLE = [
 def fetch_via_rest():
     """Use requests to hit Supabase REST API (no supabase package needed)."""
     import urllib.request
+    import urllib.error
 
+    url = SUPABASE_URL + "/rest/v1/survey_responses?select=*&order=created_at.desc"
     req = urllib.request.Request(
-        SUPABASE_URL + "/rest/v1/survey_responses?select=*&order=created_at.desc",
+        url,
         headers={
             "apikey": SUPABASE_ANON_KEY,
             "Authorization": "Bearer " + SUPABASE_ANON_KEY,
@@ -39,22 +41,39 @@ def fetch_via_rest():
         },
         method="GET",
     )
-    with urllib.request.urlopen(req) as resp:
-        return json.loads(resp.read().decode())
+    try:
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            data = json.loads(resp.read().decode())
+    except urllib.error.HTTPError as e:
+        body = e.read().decode() if e.fp else ""
+        try:
+            err_json = json.loads(body) if body else {}
+            msg = err_json.get("message", err_json.get("error_description", body))
+        except json.JSONDecodeError:
+            msg = body or str(e)
+        raise RuntimeError(f"Supabase returned {e.code} {e.reason}: {msg}") from e
+    except urllib.error.URLError as e:
+        raise RuntimeError(f"Network error: {e.reason}") from e
+
+    if not isinstance(data, list):
+        raise RuntimeError(f"Expected a list of rows from Supabase, got {type(data).__name__}: {data}")
+    return data
 
 
 def main():
+    """Fetch from Supabase and write survey_responses.json. Returns True on success, False otherwise."""
     if not SUPABASE_URL or not SUPABASE_ANON_KEY:
         print("Set SUPABASE_URL and SUPABASE_ANON_KEY in your environment or .env file.")
         print("See SUPABASE_SETUP.md for instructions.")
-        return
+        return False
 
     print("Fetching responses from Supabase...")
     try:
         rows = fetch_via_rest()
     except Exception as e:
         print("Error fetching:", e)
-        return
+        print("(Using existing survey_responses.json or template if present.)")
+        return False
 
     # Build responses dict: one entry per person (latest if duplicates)
     responses = {}
@@ -82,6 +101,7 @@ def main():
     if len(responses) < len(PEOPLE):
         missing = set(PEOPLE) - set(responses.keys())
         print(f"Still missing: {', '.join(sorted(missing))}")
+    return True
 
 
 if __name__ == "__main__":
