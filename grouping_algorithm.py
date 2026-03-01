@@ -24,10 +24,11 @@ WEIGHT_LIFESTYLE = 1.0    # Within-suite lifestyle compatibility
 @dataclass
 class Person:
     name: str
-    suite_preference: str  # strongly_prefer_6, prefer_6, no_preference, prefer_4, strongly_prefer_4
+    prefer_6_strength: int  # 1-5
+    prefer_4_strength: int  # 1-5
     top5_suitemates: list[str]
     conflicts: list[str]
-    lifestyle: dict
+    lifestyle: dict  # sleep_time (0-5), hosting_comfort (1-5)
 
 
 def _parse_conflicts(raw: Union[list, str]) -> list:
@@ -35,6 +36,24 @@ def _parse_conflicts(raw: Union[list, str]) -> list:
     if isinstance(raw, str):
         return [c.strip() for c in raw.split(",") if c.strip()]
     return [c.strip() for c in raw if c and isinstance(c, str)]
+
+
+def _parse_suite_strengths(r: dict) -> tuple[int, int]:
+    """Get (prefer_6_strength, prefer_4_strength) from response; support legacy suite_preference."""
+    s6 = r.get("prefer_6_strength")
+    s4 = r.get("prefer_4_strength")
+    if s6 is not None and s4 is not None:
+        return (int(s6), int(s4))
+    # Legacy: map suite_preference to 1-5 strengths
+    legacy = r.get("suite_preference", "no_preference")
+    mapping = {
+        "strongly_prefer_6": (5, 1),
+        "prefer_6": (4, 2),
+        "no_preference": (3, 3),
+        "prefer_4": (2, 4),
+        "strongly_prefer_4": (1, 5),
+    }
+    return mapping.get(legacy, (3, 3))
 
 
 def load_survey_data(path: str) -> tuple[list[str], dict[str, Person]]:
@@ -45,9 +64,11 @@ def load_survey_data(path: str) -> tuple[list[str], dict[str, Person]]:
     responses = data["responses"]
     persons = {}
     for name, r in responses.items():
+        s6, s4 = _parse_suite_strengths(r)
         persons[name] = Person(
             name=name,
-            suite_preference=r.get("suite_preference", "no_preference"),
+            prefer_6_strength=s6,
+            prefer_4_strength=s4,
             top5_suitemates=r.get("top5_suitemates", []),
             conflicts=_parse_conflicts(r.get("conflicts", [])),
             lifestyle=r.get("lifestyle", {}),
@@ -77,57 +98,37 @@ def preference_score(group: set[str], persons: dict[str, Person]) -> float:
 
 
 def suite_preference_score(suite_6: set[str], suite_4: set[str], persons: dict[str, Person]) -> float:
-    """Score from people getting their preferred suite size."""
+    """Score from people getting their preferred suite size (prefer_6/prefer_4 strength 1-5)."""
     total = 0.0
-    pref_scores = {
-        "strongly_prefer_6": (2.0, 0.0),
-        "prefer_6": (1.0, 0.0),
-        "no_preference": (0.5, 0.5),
-        "prefer_4": (0.0, 1.0),
-        "strongly_prefer_4": (0.0, 2.0),
-    }
     for name in suite_6:
-        s6, s4 = pref_scores.get(persons[name].suite_preference, (0.5, 0.5))
-        total += s6
+        total += persons[name].prefer_6_strength
     for name in suite_4:
-        s6, s4 = pref_scores.get(persons[name].suite_preference, (0.5, 0.5))
-        total += s4
+        total += persons[name].prefer_4_strength
     return total
 
 
 def lifestyle_compatibility(group: set[str], persons: dict[str, Person]) -> float:
     """
     Score how compatible lifestyles are within the group.
-    Uses importance (not_important, somewhat_important, very_important) for
-    sleep, noise, and cleanliness. Same or adjacent importance = good.
+    Uses sleep_time (0-5) and hosting_comfort (1-5). Closer values = better.
     """
     if len(group) < 2:
         return 0.0
-    categories = ["sleep", "noise", "cleanliness"]
-    importance_order = ["not_important", "somewhat_important", "very_important"]
-    orderings = {cat: importance_order for cat in categories}
     total = 0.0
     pairs = 0
     for a, b in itertools.combinations(group, 2):
         pair_score = 0.0
-        for cat in categories:
-            order = orderings.get(cat, [])
-            val_a = persons[a].lifestyle.get(cat)
-            val_b = persons[b].lifestyle.get(cat)
-            if not val_a or not val_b:
-                pair_score += 0.5  # Unknown = neutral
+        for key, max_dist in [("sleep_time", 5), ("hosting_comfort", 4)]:
+            val_a = persons[a].lifestyle.get(key)
+            val_b = persons[b].lifestyle.get(key)
+            if val_a is None or val_b is None:
+                pair_score += 0.5
                 continue
             try:
-                i_a = order.index(val_a)
-                i_b = order.index(val_b)
-                dist = abs(i_a - i_b)
-                if dist == 0:
-                    pair_score += 1.0
-                elif dist == 1:
-                    pair_score += 0.7
-                else:
-                    pair_score += max(0.2, 0.5 - 0.1 * dist)
-            except ValueError:
+                diff = abs(int(val_a) - int(val_b))
+                # 0 diff = 1.0, max diff = 0.2
+                pair_score += max(0.2, 1.0 - (diff / max_dist) * 0.8)
+            except (TypeError, ValueError):
                 pair_score += 0.5
         total += pair_score
         pairs += 1
@@ -180,14 +181,14 @@ def generate_justification(
             lines.append(f"  - {name} is with preferred suitemates: {', '.join(matches)}")
     lines.append("")
 
-    # Suite size
-    got_6 = [n for n in suite_6 if persons[n].suite_preference in ("prefer_6", "strongly_prefer_6")]
-    got_4 = [n for n in suite_4 if persons[n].suite_preference in ("prefer_4", "strongly_prefer_4")]
+    # Suite size (prefer_6_strength vs prefer_4_strength)
+    got_6 = [n for n in suite_6 if persons[n].prefer_6_strength >= persons[n].prefer_4_strength]
+    got_4 = [n for n in suite_4 if persons[n].prefer_4_strength >= persons[n].prefer_6_strength]
     lines.append("**Suite size preference:**")
     if got_6:
-        lines.append(f"  - In 6-person and wanted 6: {', '.join(got_6)}")
+        lines.append(f"  - In 6-person (prefer 6): {', '.join(got_6)}")
     if got_4:
-        lines.append(f"  - In 4-person and wanted 4: {', '.join(got_4)}")
+        lines.append(f"  - In 4-person (prefer 4): {', '.join(got_4)}")
     lines.append("")
 
     # Scores

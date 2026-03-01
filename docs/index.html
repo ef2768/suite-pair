@@ -174,15 +174,15 @@
 
       <fieldset>
         <legend>2. Suite size preference</legend>
-        <span class="field-label">Which suite do you prefer?</span>
-        <div class="suite-row" id="suiteRow" role="group">
-          <button type="button" class="btn-option" data-value="strongly_prefer_6">Strongly prefer 6</button>
-          <button type="button" class="btn-option" data-value="prefer_6">Prefer 6</button>
-          <button type="button" class="btn-option" data-value="no_preference">No preference</button>
-          <button type="button" class="btn-option" data-value="prefer_4">Prefer 4</button>
-          <button type="button" class="btn-option" data-value="strongly_prefer_4">Strongly prefer 4</button>
+        <span class="field-label">Rate how strongly you prefer each (1 = not at all, 5 = strongly prefer).</span>
+        <div class="slider-block">
+          <div class="slider-label"><span>6-person suite</span><span id="prefer6Val">3</span></div>
+          <input type="range" id="prefer6" min="1" max="5" value="3" step="1">
         </div>
-        <input type="hidden" id="suite" required>
+        <div class="slider-block">
+          <div class="slider-label"><span>4-person suite</span><span id="prefer4Val">3</span></div>
+          <input type="range" id="prefer4" min="1" max="5" value="3" step="1">
+        </div>
       </fieldset>
 
       <fieldset>
@@ -200,18 +200,13 @@
 
       <fieldset>
         <legend>5. Lifestyle</legend>
-        <span class="field-label">How important is each of these to you in a suite?</span>
         <div class="slider-block">
-          <div class="slider-label"><span>Similar sleep schedules (early bird / night owl)</span><span id="sleepVal">Somewhat important</span></div>
-          <input type="range" id="sleep" min="0" max="2" value="1" step="1">
+          <div class="slider-label"><span>What time do you usually go to sleep?</span><span id="sleepTimeVal">11pm – 12am</span></div>
+          <input type="range" id="sleepTime" min="0" max="5" value="2" step="1">
         </div>
         <div class="slider-block">
-          <div class="slider-label"><span>Quiet when studying</span><span id="noiseVal">Somewhat important</span></div>
-          <input type="range" id="noise" min="0" max="2" value="1" step="1">
-        </div>
-        <div class="slider-block">
-          <div class="slider-label"><span>Keeping common areas tidy</span><span id="cleanVal">Somewhat important</span></div>
-          <input type="range" id="cleanliness" min="0" max="2" value="1" step="1">
+          <div class="slider-label"><span>How comfortable are you hosting things at the suite?</span><span id="hostingVal">3</span></div>
+          <input type="range" id="hosting" min="1" max="5" value="3" step="1">
         </div>
       </fieldset>
 
@@ -231,9 +226,7 @@
   <script>
     const PEOPLE = ['Derek', 'Michael', 'Raiymbek', 'Aryan', 'Ethan', 'Bill', 'Kat', 'Elson', 'Luke', 'Victor'];
 
-    const SUITE_LABELS = { strongly_prefer_6: 'Strongly 6', prefer_6: 'Prefer 6', no_preference: 'No pref', prefer_4: 'Prefer 4', strongly_prefer_4: 'Strongly 4' };
-    const IMPORTANCE = ['not_important', 'somewhat_important', 'very_important'];
-    const IMPORTANCE_LABELS = ['Not important', 'Somewhat important', 'Very important'];
+    const SLEEP_TIME_LABELS = ['Before 10pm', '10–11pm', '11pm–12am', '12–1am', '1–2am', 'After 2am'];
 
     // 1. Name buttons
     const nameGrid = document.getElementById('nameGrid');
@@ -254,14 +247,12 @@
       nameGrid.appendChild(btn);
     });
 
-    // 2. Suite buttons
-    const suiteInput = document.getElementById('suite');
-    document.getElementById('suiteRow').querySelectorAll('.btn-option').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.getElementById('suiteRow').querySelectorAll('.btn-option').forEach(b => b.classList.remove('selected'));
-        btn.classList.add('selected');
-        suiteInput.value = btn.dataset.value;
-      });
+    // 2. Suite preference sliders (1–5 each)
+    document.getElementById('prefer6').addEventListener('input', e => {
+      document.getElementById('prefer6Val').textContent = e.target.value;
+    });
+    document.getElementById('prefer4').addEventListener('input', e => {
+      document.getElementById('prefer4Val').textContent = e.target.value;
     });
 
     // 3. Top 5: fixed buttons, click to add in order (1–5), click again to remove
@@ -339,15 +330,12 @@
 
     nameInput.addEventListener('input', () => { conflictSelected.clear(); updateConflictGrid(); });
 
-    // 5. Lifestyle importance slider labels
-    document.getElementById('sleep').addEventListener('input', e => {
-      document.getElementById('sleepVal').textContent = IMPORTANCE_LABELS[+e.target.value];
+    // 5. Lifestyle sliders
+    document.getElementById('sleepTime').addEventListener('input', e => {
+      document.getElementById('sleepTimeVal').textContent = SLEEP_TIME_LABELS[+e.target.value];
     });
-    document.getElementById('noise').addEventListener('input', e => {
-      document.getElementById('noiseVal').textContent = IMPORTANCE_LABELS[+e.target.value];
-    });
-    document.getElementById('cleanliness').addEventListener('input', e => {
-      document.getElementById('cleanVal').textContent = IMPORTANCE_LABELS[+e.target.value];
+    document.getElementById('hosting').addEventListener('input', e => {
+      document.getElementById('hostingVal').textContent = e.target.value;
     });
 
     // Submit
@@ -355,17 +343,16 @@
       e.preventDefault();
       const name = nameInput.value;
       if (!name) { alert('Please select your name.'); return; }
-      if (!suiteInput.value) { alert('Please select a suite preference.'); return; }
 
       const response = {
         [name]: {
-          suite_preference: suiteInput.value,
+          prefer_6_strength: +document.getElementById('prefer6').value,
+          prefer_4_strength: +document.getElementById('prefer4').value,
           top5_suitemates: top5Order.slice(0, 5),
           conflicts: Array.from(conflictSelected),
           lifestyle: {
-            sleep: IMPORTANCE[+document.getElementById('sleep').value],
-            noise: IMPORTANCE[+document.getElementById('noise').value],
-            cleanliness: IMPORTANCE[+document.getElementById('cleanliness').value]
+            sleep_time: +document.getElementById('sleepTime').value,
+            hosting_comfort: +document.getElementById('hosting').value
           }
         }
       };

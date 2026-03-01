@@ -1,6 +1,6 @@
-# How to push the survey fix to GitHub
+# How to push updates to GitHub
 
-You need to push the new **docs** folder so the website shows the survey. Do this in **Git Bash** or **Command Prompt** (in the project folder).
+**Latest:** Suite preference is now two sliders (6-person and 4-person, 1–5). Lifestyle is sleep time + hosting comfort. Push to update the live survey. Do this in **Git Bash** or **Command Prompt** (in the project folder).
 
 ---
 
