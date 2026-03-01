@@ -69,41 +69,30 @@
     .suite-row { display: flex; flex-wrap: wrap; gap: 8px; }
     .suite-row .btn-option { flex: 1; min-width: 0; }
 
-    /* Top 5: tap to add in order */
+    /* Top 5: fixed row of buttons, click to set order (1–5), click again to remove */
     .top5-pool {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
     }
-    .top5-pool .btn-option:disabled { opacity: 0.4; cursor: not-allowed; }
-    .top5-list {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 8px;
-      min-height: 44px;
-      padding: 10px;
-      background: var(--bg);
-      border-radius: 10px;
-      border: 1px solid var(--border);
-    }
-    .top5-list .chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 8px 12px;
+    .top5-pool .btn-option .rank-badge {
+      display: inline-block;
+      min-width: 18px;
+      height: 18px;
+      line-height: 18px;
+      margin-left: 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
       background: var(--accent);
       color: #fff;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      font-weight: 500;
+      border-radius: 50%;
+      text-align: center;
     }
-    .top5-list .chip .remove { cursor: pointer; opacity: 0.9; font-weight: bold; }
-    .top5-list .chip .remove:hover { opacity: 1; }
-    .top5-list .placeholder { color: var(--muted); font-size: 0.9rem; }
+    .top5-pool .btn-option.selected { border-color: var(--accent); background: rgba(88, 166, 255, 0.15); color: var(--accent); }
+    .top5-order-hint { font-size: 0.9rem; color: var(--muted); margin: 8px 0 0; min-height: 1.4em; }
 
-    /* Conflicts: checkboxes as buttons */
+    /* Prefer NOT: fixed row of buttons, click to toggle */
     .conflict-grid { display: flex; flex-wrap: wrap; gap: 8px; }
     .conflict-grid .btn-option.selected { border-color: var(--danger); background: rgba(248, 81, 73, 0.12); color: #f85149; }
 
@@ -198,39 +187,31 @@
 
       <fieldset>
         <legend>3. Top 5 suitemates</legend>
-        <span class="field-label">Tap names in order of preference (most wanted first). Use × on a chip to remove.</span>
+        <span class="field-label">Click names in the order you want (1st click = #1, 2nd = #2, … up to 5). Click again to remove.</span>
         <div class="top5-pool" id="top5Pool"></div>
-        <div class="top5-list" id="top5List"><span class="placeholder">Your picks will appear here…</span></div>
+        <p class="top5-order-hint" id="top5OrderHint">Select your name above first.</p>
       </fieldset>
 
       <fieldset>
         <legend>4. Prefer NOT to be with</legend>
-        <span class="field-label">Select anyone you’d rather not be in the same suite with (optional).</span>
+        <span class="field-label">Select anyone you’d rather not be in the same suite with (optional). Click again to clear.</span>
         <div class="conflict-grid" id="conflictGrid"></div>
       </fieldset>
 
       <fieldset>
         <legend>5. Lifestyle</legend>
-        <span class="field-label">Slide to match your habits.</span>
+        <span class="field-label">How important is each of these to you in a suite?</span>
         <div class="slider-block">
-          <div class="slider-label"><span>Early bird</span><span id="sleepVal">Normal</span></div>
-          <input type="range" id="sleep" min="0" max="3" value="1" step="1">
+          <div class="slider-label"><span>Similar sleep schedules (early bird / night owl)</span><span id="sleepVal">Somewhat important</span></div>
+          <input type="range" id="sleep" min="0" max="2" value="1" step="1">
         </div>
         <div class="slider-block">
-          <div class="slider-label"><span>Quiet</span><span id="noiseVal">Okay with some noise</span></div>
+          <div class="slider-label"><span>Quiet when studying</span><span id="noiseVal">Somewhat important</span></div>
           <input type="range" id="noise" min="0" max="2" value="1" step="1">
         </div>
         <div class="slider-block">
-          <div class="slider-label"><span>Tidy</span><span id="cleanVal">Moderate</span></div>
+          <div class="slider-label"><span>Keeping common areas tidy</span><span id="cleanVal">Somewhat important</span></div>
           <input type="range" id="cleanliness" min="0" max="2" value="1" step="1">
-        </div>
-        <div class="slider-block">
-          <div class="slider-label"><span>Few guests</span><span id="guestsVal">Occasional</span></div>
-          <input type="range" id="guests" min="0" max="2" value="1" step="1">
-        </div>
-        <div class="slider-block">
-          <div class="slider-label"><span>Group hangouts</span><span id="socialVal">Balanced</span></div>
-          <input type="range" id="social" min="0" max="2" value="1" step="1">
         </div>
       </fieldset>
 
@@ -251,16 +232,8 @@
     const PEOPLE = ['Derek', 'Michael', 'Raiymbek', 'Aryan', 'Ethan', 'Bill', 'Kat', 'Elson', 'Luke', 'Victor'];
 
     const SUITE_LABELS = { strongly_prefer_6: 'Strongly 6', prefer_6: 'Prefer 6', no_preference: 'No pref', prefer_4: 'Prefer 4', strongly_prefer_4: 'Strongly 4' };
-    const SLEEP = ['early_bird', 'normal', 'night_owl', 'irregular'];
-    const SLEEP_LABELS = ['Early bird', 'Normal', 'Night owl', 'Irregular'];
-    const NOISE = ['quiet', 'okay_some', 'dont_mind'];
-    const NOISE_LABELS = ['Quiet', 'Okay with some noise', "Don't mind"];
-    const CLEAN = ['tidy', 'moderate', 'relaxed'];
-    const CLEAN_LABELS = ['Tidy', 'Moderate', 'Relaxed'];
-    const GUESTS = ['minimal', 'occasional', 'frequent'];
-    const GUESTS_LABELS = ['Minimal', 'Occasional', 'Frequent'];
-    const SOCIAL = ['group', 'balanced', 'solo'];
-    const SOCIAL_LABELS = ['Group', 'Balanced', 'Solo'];
+    const IMPORTANCE = ['not_important', 'somewhat_important', 'very_important'];
+    const IMPORTANCE_LABELS = ['Not important', 'Somewhat important', 'Very important'];
 
     // 1. Name buttons
     const nameGrid = document.getElementById('nameGrid');
@@ -291,56 +264,56 @@
       });
     });
 
-    // 3. Top 5 (tap to add in order)
+    // 3. Top 5: fixed buttons, click to add in order (1–5), click again to remove
     let top5Order = [];
     const top5Pool = document.getElementById('top5Pool');
-    const top5List = document.getElementById('top5List');
+    const top5OrderHint = document.getElementById('top5OrderHint');
 
-    function renderTop5List() {
-      top5List.innerHTML = '';
-      if (top5Order.length === 0) {
-        const ph = document.createElement('span');
-        ph.className = 'placeholder';
-        ph.textContent = 'Your picks will appear here…';
-        top5List.appendChild(ph);
-        return;
-      }
-      top5Order.forEach((name, i) => {
-        const chip = document.createElement('span');
-        chip.className = 'chip';
-        chip.innerHTML = `<span>${i + 1}. ${name}</span> <span class="remove" data-name="${name}" aria-label="Remove">×</span>`;
-        chip.querySelector('.remove').addEventListener('click', () => {
-          top5Order = top5Order.filter(n => n !== name);
-          renderTop5List();
-          updateTop5Pool();
-        });
-        top5List.appendChild(chip);
+    function refreshTop5Buttons() {
+      const self = nameInput.value;
+      if (!self) return;
+      const others = PEOPLE.filter(p => p !== self);
+      top5Pool.querySelectorAll('.btn-option').forEach(btn => {
+        const name = btn.dataset.name;
+        const rank = top5Order.indexOf(name) + 1;
+        const selected = rank > 0;
+        btn.classList.toggle('selected', selected);
+        btn.innerHTML = name + (selected ? '<span class="rank-badge">' + rank + '</span>' : '');
       });
+      if (top5Order.length === 0) {
+        top5OrderHint.textContent = 'Your order: (none yet)';
+      } else {
+        top5OrderHint.textContent = 'Your order: ' + top5Order.map((n, i) => (i + 1) + '. ' + n).join(', ');
+      }
     }
 
     function updateTop5Pool() {
       const self = nameInput.value;
-      if (!self) return;
       top5Pool.innerHTML = '';
-      const available = PEOPLE.filter(p => p !== self && !top5Order.includes(p));
-      available.forEach(name => {
+      top5OrderHint.textContent = self ? 'Your order: (none yet)' : 'Select your name above first.';
+      if (!self) return;
+      const others = PEOPLE.filter(p => p !== self);
+      others.forEach(name => {
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'btn-option';
+        btn.dataset.name = name;
         btn.textContent = name;
-        btn.disabled = top5Order.length >= 5;
         btn.addEventListener('click', () => {
-          if (top5Order.length < 5) {
+          const idx = top5Order.indexOf(name);
+          if (idx >= 0) {
+            top5Order.splice(idx, 1);
+          } else if (top5Order.length < 5) {
             top5Order.push(name);
-            renderTop5List();
-            updateTop5Pool();
           }
+          refreshTop5Buttons();
         });
         top5Pool.appendChild(btn);
       });
+      refreshTop5Buttons();
     }
 
-    nameInput.addEventListener('input', () => { top5Order = []; renderTop5List(); updateTop5Pool(); });
+    nameInput.addEventListener('input', () => { top5Order = []; updateTop5Pool(); });
 
     // 4. Conflicts (checkboxes as toggle buttons)
     const conflictGrid = document.getElementById('conflictGrid');
@@ -366,21 +339,15 @@
 
     nameInput.addEventListener('input', () => { conflictSelected.clear(); updateConflictGrid(); });
 
-    // 5. Slider labels
+    // 5. Lifestyle importance slider labels
     document.getElementById('sleep').addEventListener('input', e => {
-      document.getElementById('sleepVal').textContent = SLEEP_LABELS[+e.target.value];
+      document.getElementById('sleepVal').textContent = IMPORTANCE_LABELS[+e.target.value];
     });
     document.getElementById('noise').addEventListener('input', e => {
-      document.getElementById('noiseVal').textContent = NOISE_LABELS[+e.target.value];
+      document.getElementById('noiseVal').textContent = IMPORTANCE_LABELS[+e.target.value];
     });
     document.getElementById('cleanliness').addEventListener('input', e => {
-      document.getElementById('cleanVal').textContent = CLEAN_LABELS[+e.target.value];
-    });
-    document.getElementById('guests').addEventListener('input', e => {
-      document.getElementById('guestsVal').textContent = GUESTS_LABELS[+e.target.value];
-    });
-    document.getElementById('social').addEventListener('input', e => {
-      document.getElementById('socialVal').textContent = SOCIAL_LABELS[+e.target.value];
+      document.getElementById('cleanVal').textContent = IMPORTANCE_LABELS[+e.target.value];
     });
 
     // Submit
@@ -396,11 +363,9 @@
           top5_suitemates: top5Order.slice(0, 5),
           conflicts: Array.from(conflictSelected),
           lifestyle: {
-            sleep: SLEEP[+document.getElementById('sleep').value],
-            noise: NOISE[+document.getElementById('noise').value],
-            cleanliness: CLEAN[+document.getElementById('cleanliness').value],
-            guests: GUESTS[+document.getElementById('guests').value],
-            social: SOCIAL[+document.getElementById('social').value]
+            sleep: IMPORTANCE[+document.getElementById('sleep').value],
+            noise: IMPORTANCE[+document.getElementById('noise').value],
+            cleanliness: IMPORTANCE[+document.getElementById('cleanliness').value]
           }
         }
       };

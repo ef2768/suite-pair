@@ -98,18 +98,14 @@ def suite_preference_score(suite_6: set[str], suite_4: set[str], persons: dict[s
 def lifestyle_compatibility(group: set[str], persons: dict[str, Person]) -> float:
     """
     Score how compatible lifestyles are within the group.
-    Same or adjacent categories = good; opposite = lower.
+    Uses importance (not_important, somewhat_important, very_important) for
+    sleep, noise, and cleanliness. Same or adjacent importance = good.
     """
     if len(group) < 2:
         return 0.0
-    categories = ["sleep", "noise", "cleanliness", "guests", "social"]
-    orderings = {
-        "sleep": ["early_bird", "normal", "night_owl", "irregular"],
-        "noise": ["quiet", "okay_some", "dont_mind"],
-        "cleanliness": ["tidy", "moderate", "relaxed"],
-        "guests": ["minimal", "occasional", "frequent"],
-        "social": ["solo", "balanced", "group"],
-    }
+    categories = ["sleep", "noise", "cleanliness"]
+    importance_order = ["not_important", "somewhat_important", "very_important"]
+    orderings = {cat: importance_order for cat in categories}
     total = 0.0
     pairs = 0
     for a, b in itertools.combinations(group, 2):
@@ -125,7 +121,6 @@ def lifestyle_compatibility(group: set[str], persons: dict[str, Person]) -> floa
                 i_a = order.index(val_a)
                 i_b = order.index(val_b)
                 dist = abs(i_a - i_b)
-                # Same=1, adjacent=0.7, else 0.5 - 0.1*dist
                 if dist == 0:
                     pair_score += 1.0
                 elif dist == 1:
