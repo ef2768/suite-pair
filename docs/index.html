@@ -198,18 +198,6 @@
         <div class="conflict-grid" id="conflictGrid"></div>
       </fieldset>
 
-      <fieldset>
-        <legend>5. Lifestyle</legend>
-        <div class="slider-block">
-          <div class="slider-label"><span>What time do you usually go to sleep?</span><span id="sleepTimeVal">11pm – 12am</span></div>
-          <input type="range" id="sleepTime" min="0" max="5" value="2" step="1">
-        </div>
-        <div class="slider-block">
-          <div class="slider-label"><span>How comfortable are you hosting things at the suite?</span><span id="hostingVal">3</span></div>
-          <input type="range" id="hosting" min="1" max="5" value="3" step="1">
-        </div>
-      </fieldset>
-
       <button type="submit" class="btn-submit">Submit survey</button>
     </form>
 
@@ -225,8 +213,6 @@
 
   <script>
     const PEOPLE = ['Derek', 'Michael', 'Raiymbek', 'Aryan', 'Ethan', 'Bill', 'Kat', 'Elson', 'Luke', 'Victor'];
-
-    const SLEEP_TIME_LABELS = ['Before 10pm', '10–11pm', '11pm–12am', '12–1am', '1–2am', 'After 2am'];
 
     // 1. Name buttons
     const nameGrid = document.getElementById('nameGrid');
@@ -330,14 +316,6 @@
 
     nameInput.addEventListener('input', () => { conflictSelected.clear(); updateConflictGrid(); });
 
-    // 5. Lifestyle sliders
-    document.getElementById('sleepTime').addEventListener('input', e => {
-      document.getElementById('sleepTimeVal').textContent = SLEEP_TIME_LABELS[+e.target.value];
-    });
-    document.getElementById('hosting').addEventListener('input', e => {
-      document.getElementById('hostingVal').textContent = e.target.value;
-    });
-
     // Submit
     document.getElementById('survey').addEventListener('submit', function(e) {
       e.preventDefault();
@@ -349,11 +327,7 @@
           prefer_6_strength: +document.getElementById('prefer6').value,
           prefer_4_strength: +document.getElementById('prefer4').value,
           top5_suitemates: top5Order.slice(0, 5),
-          conflicts: Array.from(conflictSelected),
-          lifestyle: {
-            sleep_time: +document.getElementById('sleepTime').value,
-            hosting_comfort: +document.getElementById('hosting').value
-          }
+          conflicts: Array.from(conflictSelected)
         }
       };
 

@@ -18,7 +18,6 @@ TOTAL = 10
 # Scoring weights (tune as needed)
 WEIGHT_PREFERENCE = 3.0   # Top-5 suitemate matches (rank-weighted)
 WEIGHT_SUITE_SIZE = 2.0   # Getting preferred 6 vs 4
-WEIGHT_LIFESTYLE = 1.0    # Within-suite lifestyle compatibility
 
 
 @dataclass
@@ -107,55 +106,17 @@ def suite_preference_score(suite_6: set[str], suite_4: set[str], persons: dict[s
     return total
 
 
-def lifestyle_compatibility(group: set[str], persons: dict[str, Person]) -> float:
-    """
-    Score how compatible lifestyles are within the group.
-    Uses sleep_time (0-5) and hosting_comfort (1-5). Closer values = better.
-    """
-    if len(group) < 2:
-        return 0.0
-    total = 0.0
-    pairs = 0
-    for a, b in itertools.combinations(group, 2):
-        pair_score = 0.0
-        for key, max_dist in [("sleep_time", 5), ("hosting_comfort", 4)]:
-            val_a = persons[a].lifestyle.get(key)
-            val_b = persons[b].lifestyle.get(key)
-            if val_a is None or val_b is None:
-                pair_score += 0.5
-                continue
-            try:
-                diff = abs(int(val_a) - int(val_b))
-                # 0 diff = 1.0, max diff = 0.2
-                pair_score += max(0.2, 1.0 - (diff / max_dist) * 0.8)
-            except (TypeError, ValueError):
-                pair_score += 0.5
-        total += pair_score
-        pairs += 1
-    return total / pairs if pairs else 0.0
-
-
 def score_pairing(suite_6: set[str], suite_4: set[str], persons: dict[str, Person]) -> tuple[float, dict]:
     """
     Return (total_score, breakdown_dict) for a valid 6/4 split.
     """
     pref = preference_score(suite_6, persons) + preference_score(suite_4, persons)
     suite_pref = suite_preference_score(suite_6, suite_4, persons)
-    life_6 = lifestyle_compatibility(suite_6, persons)
-    life_4 = lifestyle_compatibility(suite_4, persons)
-    lifestyle_total = life_6 + life_4
 
-    total = (
-        WEIGHT_PREFERENCE * pref
-        + WEIGHT_SUITE_SIZE * suite_pref
-        + WEIGHT_LIFESTYLE * lifestyle_total
-    )
+    total = WEIGHT_PREFERENCE * pref + WEIGHT_SUITE_SIZE * suite_pref
     breakdown = {
         "preference_score": round(pref, 2),
         "suite_size_score": round(suite_pref, 2),
-        "lifestyle_6": round(life_6, 2),
-        "lifestyle_4": round(life_4, 2),
-        "lifestyle_total": round(lifestyle_total, 2),
         "total": round(total, 2),
     }
     return total, breakdown
@@ -195,8 +156,6 @@ def generate_justification(
     lines.append("**Scores:**")
     lines.append(f"  - Top-5 preference score: {breakdown['preference_score']}")
     lines.append(f"  - Suite size preference score: {breakdown['suite_size_score']}")
-    lines.append(f"  - Lifestyle compatibility (6-person): {breakdown['lifestyle_6']}")
-    lines.append(f"  - Lifestyle compatibility (4-person): {breakdown['lifestyle_4']}")
     lines.append(f"  - **Total score: {breakdown['total']}**")
 
     return "\n".join(lines)

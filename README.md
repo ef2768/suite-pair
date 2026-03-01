@@ -22,11 +22,13 @@ Derek, Michael, Raiymbek, Aryan, Ethan, Bill, Kat, Elson, Luke, Victor.
 
 ## Run the algorithm
 
+**After you’ve collected responses:** see **HOW_TO_RUN_ALGORITHM.md** for merging responses and where to see the output.
+
 ```bash
 python grouping_algorithm.py
 ```
 
-By default it reads `survey_responses_template.json` and writes `pairing_report.md`. To use your own file, edit the last two lines in `grouping_algorithm.py`:
+By default it reads `survey_responses_template.json` and writes `pairing_report.md`. Use `survey_responses.json` (your merged file) once you have all 10 responses. To use your own file, edit the last two lines in `grouping_algorithm.py`:
 
 ```python
 survey_file = Path(__file__).parent / "survey_responses.json"  # your file

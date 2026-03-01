@@ -1,6 +1,6 @@
 # Suite Pairing Results: Top 3 Options
 
-## Option 1 — Score: 409.0
+## Option 1 — Score: 407.0
 
 **6-person suite:** Aryan, Derek, Ethan, Luke, Michael, Raiymbek
 **4-person suite:** Bill, Elson, Kat, Victor
@@ -18,19 +18,17 @@
   - Victor is with preferred suitemates: Kat, Elson
 
 **Suite size preference:**
-  - In 6-person (prefer 6): Ethan, Aryan, Luke, Raiymbek, Derek
-  - In 4-person (prefer 4): Bill, Kat, Elson, Victor
+  - In 6-person (prefer 6): Raiymbek, Aryan, Derek, Ethan, Luke
+  - In 4-person (prefer 4): Victor, Kat, Elson, Bill
 
 **Scores:**
   - Top-5 preference score: 111.0
   - Suite size preference score: 37.0
-  - Lifestyle compatibility (6-person): 1.0
-  - Lifestyle compatibility (4-person): 1.0
-  - **Total score: 409.0**
+  - **Total score: 407.0**
 
 ---
 
-## Option 2 — Score: 360.0
+## Option 2 — Score: 358.0
 
 **6-person suite:** Aryan, Derek, Ethan, Luke, Michael, Victor
 **4-person suite:** Bill, Elson, Kat, Raiymbek
@@ -48,19 +46,17 @@
   - Victor is with preferred suitemates: Michael, Aryan
 
 **Suite size preference:**
-  - In 6-person (prefer 6): Ethan, Aryan, Luke, Derek
-  - In 4-person (prefer 4): Bill, Kat, Elson, Raiymbek
+  - In 6-person (prefer 6): Aryan, Derek, Ethan, Luke
+  - In 4-person (prefer 4): Raiymbek, Kat, Elson, Bill
 
 **Scores:**
   - Top-5 preference score: 96.0
   - Suite size preference score: 35.0
-  - Lifestyle compatibility (6-person): 1.0
-  - Lifestyle compatibility (4-person): 1.0
-  - **Total score: 360.0**
+  - **Total score: 358.0**
 
 ---
 
-## Option 3 — Score: 355.0
+## Option 3 — Score: 353.0
 
 **6-person suite:** Aryan, Bill, Elson, Kat, Raiymbek, Victor
 **4-person suite:** Derek, Ethan, Luke, Michael
@@ -78,14 +74,12 @@
   - Victor is with preferred suitemates: Raiymbek, Kat, Elson, Aryan
 
 **Suite size preference:**
-  - In 6-person (prefer 6): Elson, Aryan, Raiymbek
+  - In 6-person (prefer 6): Elson, Raiymbek, Aryan
   - In 4-person (prefer 4): Michael
 
 **Scores:**
   - Top-5 preference score: 101.0
   - Suite size preference score: 25.0
-  - Lifestyle compatibility (6-person): 1.0
-  - Lifestyle compatibility (4-person): 1.0
-  - **Total score: 355.0**
+  - **Total score: 353.0**
 
 ---
