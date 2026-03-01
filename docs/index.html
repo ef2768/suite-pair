@@ -214,6 +214,10 @@
   <script>
     const PEOPLE = ['Derek', 'Michael', 'Raiymbek', 'Aryan', 'Ethan', 'Bill', 'Kat', 'Elson', 'Luke', 'Victor'];
 
+    // Supabase: set these to save responses to your database (see SUPABASE_SETUP.md)
+    const SUPABASE_URL = '';
+    const SUPABASE_ANON_KEY = '';
+
     // 1. Name buttons
     const nameGrid = document.getElementById('nameGrid');
     const nameInput = document.getElementById('name');
@@ -317,17 +321,22 @@
     nameInput.addEventListener('input', () => { conflictSelected.clear(); updateConflictGrid(); });
 
     // Submit
-    document.getElementById('survey').addEventListener('submit', function(e) {
+    document.getElementById('survey').addEventListener('submit', async function(e) {
       e.preventDefault();
       const name = nameInput.value;
       if (!name) { alert('Please select your name.'); return; }
 
+      const prefer6 = +document.getElementById('prefer6').value;
+      const prefer4 = +document.getElementById('prefer4').value;
+      const top5 = top5Order.slice(0, 5);
+      const conflicts = Array.from(conflictSelected);
+
       const response = {
         [name]: {
-          prefer_6_strength: +document.getElementById('prefer6').value,
-          prefer_4_strength: +document.getElementById('prefer4').value,
-          top5_suitemates: top5Order.slice(0, 5),
-          conflicts: Array.from(conflictSelected)
+          prefer_6_strength: prefer6,
+          prefer_4_strength: prefer4,
+          top5_suitemates: top5,
+          conflicts: conflicts
         }
       };
 
@@ -337,6 +346,34 @@
       document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
       window._lastJson = jsonStr;
       window._lastName = name;
+
+      if (SUPABASE_URL && SUPABASE_ANON_KEY) {
+        const row = {
+          respondent_name: name,
+          prefer_6_strength: prefer6,
+          prefer_4_strength: prefer4,
+          top5_suitemates: top5,
+          conflicts: conflicts
+        };
+        try {
+          const res = await fetch(SUPABASE_URL + '/rest/v1/survey_responses?on_conflict=respondent_name', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'apikey': SUPABASE_ANON_KEY,
+              'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+              'Prefer': 'resolution=merge-duplicates'
+            },
+            body: JSON.stringify(row)
+          });
+          if (!res.ok) {
+            const err = await res.text();
+            console.warn('Supabase save failed:', err);
+          }
+        } catch (err) {
+          console.warn('Supabase save failed:', err);
+        }
+      }
     });
 
     document.getElementById('copyBtn').addEventListener('click', function() {

@@ -8,6 +8,8 @@ Derek, Michael, Raiymbek, Aryan, Ethan, Bill, Kat, Elson, Luke, Victor.
 
 ## Survey
 
+**Optional: save responses to a database** — See **SUPABASE_SETUP.md** to connect the survey to Supabase. Responses are then stored automatically when people submit; run `python fetch_responses.py` to pull them into **survey_responses.json**.
+
 1. **Send the survey** — Use `survey.md` (print or convert to Google Forms/Typeform). It collects:
    - **Suite size preference:** 6-person vs 4-person (strongly prefer / prefer / no preference).
    - **Top 5 suitemates:** Who they’d most like to be with (ranked 1–5).
