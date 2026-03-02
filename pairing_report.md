@@ -2,86 +2,50 @@
 
 **Survey responses recorded:** 10
 
-## Option 1 — Score: 407.0
+## Option 1 — Score: 352.0
 
-**6-person suite:** Aryan, Derek, Ethan, Luke, Michael, Raiymbek
-**4-person suite:** Bill, Elson, Kat, Victor
+**Suite composition:**
+- 6-person suite: Aryan, Bill, Elson, Ethan, Kat, Michael
+- 4-person suite: Derek, Luke, Raiymbek, Victor
 
-**Preference fulfillment:**
-  - Aryan is with preferred suitemates: Raiymbek, Ethan, Derek, Luke
-  - Bill is with preferred suitemates: Kat, Victor
-  - Derek is with preferred suitemates: Ethan, Michael, Luke, Aryan
-  - Elson is with preferred suitemates: Kat, Victor, Bill
-  - Ethan is with preferred suitemates: Derek, Michael, Aryan, Luke
-  - Kat is with preferred suitemates: Bill, Elson, Victor
-  - Luke is with preferred suitemates: Derek, Ethan, Michael, Aryan
-  - Michael is with preferred suitemates: Derek, Ethan, Luke, Raiymbek
-  - Raiymbek is with preferred suitemates: Aryan, Ethan, Luke
-  - Victor is with preferred suitemates: Kat, Elson
+**Why this option scores well (anonymous):**
+This option gives 6 out of 10 people their more preferred suite size. It also places 9 out of 10 people with at least one of their top suitemate choices. It keeps 12 mutual preference pair(s) together (pairs who ranked each other). Overall, higher scores favor options that respect more preferences and suite size priorities while still avoiding conflicts.
 
-**Suite size preference:**
-  - In 6-person (prefer 6): Derek, Luke, Raiymbek, Ethan, Aryan
-  - In 4-person (prefer 4): Kat, Elson, Victor, Bill
-
-**Scores:**
-  - Top-5 preference score: 111.0
-  - Suite size preference score: 37.0
-  - **Total score: 407.0**
-
----
-
-## Option 2 — Score: 358.0
-
-**6-person suite:** Aryan, Derek, Ethan, Luke, Michael, Victor
-**4-person suite:** Bill, Elson, Kat, Raiymbek
-
-**Preference fulfillment:**
-  - Aryan is with preferred suitemates: Ethan, Derek, Luke, Victor
-  - Bill is with preferred suitemates: Kat
-  - Derek is with preferred suitemates: Ethan, Michael, Luke, Aryan
-  - Elson is with preferred suitemates: Kat, Bill, Raiymbek
-  - Ethan is with preferred suitemates: Derek, Michael, Aryan, Luke
-  - Kat is with preferred suitemates: Bill, Elson
-  - Luke is with preferred suitemates: Derek, Ethan, Michael, Aryan
-  - Michael is with preferred suitemates: Derek, Ethan, Victor, Luke
-  - Raiymbek is with preferred suitemates: Kat
-  - Victor is with preferred suitemates: Michael, Aryan
-
-**Suite size preference:**
-  - In 6-person (prefer 6): Derek, Luke, Ethan, Aryan
-  - In 4-person (prefer 4): Kat, Raiymbek, Elson, Bill
-
-**Scores:**
-  - Top-5 preference score: 96.0
+**Scores driving this option:**
+  - Top-5 preference score: 94.0
   - Suite size preference score: 35.0
-  - **Total score: 358.0**
+  - **Total score: 352.0**
 
 ---
 
-## Option 3 — Score: 353.0
+## Option 2 — Score: 248.0
 
-**6-person suite:** Aryan, Bill, Elson, Kat, Raiymbek, Victor
-**4-person suite:** Derek, Ethan, Luke, Michael
+**Suite composition:**
+- 6-person suite: Bill, Derek, Ethan, Luke, Raiymbek, Victor
+- 4-person suite: Aryan, Elson, Kat, Michael
 
-**Preference fulfillment:**
-  - Aryan is with preferred suitemates: Raiymbek, Victor
-  - Bill is with preferred suitemates: Kat, Victor
-  - Derek is with preferred suitemates: Ethan, Michael, Luke
-  - Elson is with preferred suitemates: Kat, Victor, Bill, Raiymbek
-  - Ethan is with preferred suitemates: Derek, Michael, Luke
-  - Kat is with preferred suitemates: Bill, Elson, Victor
-  - Luke is with preferred suitemates: Derek, Ethan, Michael
-  - Michael is with preferred suitemates: Derek, Ethan, Luke
-  - Raiymbek is with preferred suitemates: Aryan, Victor, Kat
-  - Victor is with preferred suitemates: Raiymbek, Kat, Elson, Aryan
+**Why this option scores well (anonymous):**
+This option gives 7 out of 10 people their more preferred suite size. It also places 9 out of 10 people with at least one of their top suitemate choices. It keeps 6 mutual preference pair(s) together (pairs who ranked each other). Overall, higher scores favor options that respect more preferences and suite size priorities while still avoiding conflicts.
 
-**Suite size preference:**
-  - In 6-person (prefer 6): Elson, Raiymbek, Aryan
-  - In 4-person (prefer 4): Michael
+**Scores driving this option:**
+  - Top-5 preference score: 58.0
+  - Suite size preference score: 37.0
+  - **Total score: 248.0**
 
-**Scores:**
-  - Top-5 preference score: 101.0
-  - Suite size preference score: 25.0
-  - **Total score: 353.0**
+---
+
+## Option 3 — Score: 241.0
+
+**Suite composition:**
+- 6-person suite: Aryan, Bill, Derek, Elson, Luke, Raiymbek
+- 4-person suite: Ethan, Kat, Michael, Victor
+
+**Why this option scores well (anonymous):**
+This option gives 6 out of 10 people their more preferred suite size. It also places 8 out of 10 people with at least one of their top suitemate choices. It keeps 5 mutual preference pair(s) together (pairs who ranked each other). Overall, higher scores favor options that respect more preferences and suite size priorities while still avoiding conflicts.
+
+**Scores driving this option:**
+  - Top-5 preference score: 59.0
+  - Suite size preference score: 32.0
+  - **Total score: 241.0**
 
 ---
